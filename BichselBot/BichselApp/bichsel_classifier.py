@@ -1,8 +1,11 @@
 import os
+import glob
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 from keras.layers import MaxPooling2D, Conv2D, MaxPooling2D, Activation, Dropout, Flatten, Dense, Input
 from keras.models import Sequential
+from django.conf import settings
+from django.http import HttpResponse
 from keras.utils import img_to_array, load_img
 from keras import backend as K
 import numpy as np
@@ -46,9 +49,6 @@ model.compile(loss='binary_crossentropy',
 model.load_weights('BichselApp/bichsel_model.h5')
 
 def prepare_image(image_path):
-    """
-    Bereitet ein Bild für die Vorhersage vor.
-    """
     # Bild laden
     img = load_img(image_path, target_size=(img_width, img_height))
     # Bild in ein Array umwandeln
@@ -59,20 +59,20 @@ def prepare_image(image_path):
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
 
-def ask_bichsel():
-    # Upload Ordner
-    image_folder = 'uploads'
-    image_paths = os.listdir(image_folder)
 
-    # Vorhersage für jedes Bild
-    for image_name in image_paths:
-        image_path = os.path.join(image_folder, image_name)
-        # Bereite das Bild vor
-        img = prepare_image(image_path)
-        # Vorhersage machen
-        prediction = model.predict(img)
-        # Ergebnis interpretieren
-        if prediction[0] > 0.5:
-            return f"Zu '{image_name}' sage ich 'Tisch'."
-        else:
-            return f"Zu '{image_name}' sage ich 'Stuhl'."
+def ask_bichsel(image_path):
+
+    filename = os.path.basename(image_path)
+    print(filename)
+    # Bild vorbereiten
+    img = prepare_image(image_path)
+    
+    # Vorhersage treffen
+    prediction = model.predict(img)
+    
+    # Rückgabe je nach Vorhersage
+    if prediction[0][0] > 0.5:
+        return f"Zu '{filename}' sage ich 'Tisch'."
+    else:
+        return f"Zu '{filename}' sage ich 'Stuhl'."
+

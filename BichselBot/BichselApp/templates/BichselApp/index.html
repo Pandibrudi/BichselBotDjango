@@ -53,25 +53,30 @@
             </div>
             <!-- Anzeige Bild -->
             <div class="col text-center" id="step2">
-                {% if file_url %}
-                <h3>Schritt 2:</h3>
-                <img src="{{ file_url }}" alt="Hochgeladenes Bild" style="max-width: 50%;">
-                <form method="GET" action="{% url 'image_processing' %}">
-                    <input type="hidden" name="file_url" value="{{ file_url }}">
-                    <input type="hidden" name="file_path" value="{{ file_path }}">
-                    <button id="askBtn" class="btn btn-outline-info m-3">Benenne diesen Gegenstand</button>
-                </form>                
+                {% if file_url and file_path %}
+                    <h3>Schritt 2:</h3>
+                    <img src="{{ file_url }}" alt="Hochgeladenes Bild" style="max-width: 50%;">
+                    <form method="GET" action="{% url 'image_processing' %}">
+                        <input type="hidden" name="file_url" value="{{ file_url }}">
+                        <input type="hidden" name="file_path" value="{{ file_path }}">
+                        <button id="askBtn" class="btn btn-outline-info m-3">Benenne diesen Gegenstand</button>
+                    </form>                
                 {% endif %}
+
             </div>
             <!-- Classify -->
             <div class="col text-center d-flex align-items-center">
                 <div class="row" id="bichsel">
                     <div class="col">
                         <img src="{% static 'img/Bichsel.jpg' %}" alt="Peter Bichsel" class="bichselbild">
-                    </div>
-                    <div class="col">
-                        <h5 class="alert-heading">Peter Bichsel sagt:</h5>
-                        <div id="result"></div>
+                        <div class="row text-center">
+                            <h5 class="alert-heading">Peter Bichsel sagt:</h5>
+                            {% if answer %}
+                                <p>{{ answer }}</p>
+                            {% else %}
+                                <p>Noch keine Antwort.</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
