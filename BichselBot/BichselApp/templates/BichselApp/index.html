@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bichsel Bot</title>
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <!-- Bootstrap JS -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- Popper JS -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+
+    <link rel= "stylesheet" type= "text/css" href= "{% static 'css/index.css' %}">
+    <link rel= "stylesheet" type= "text/css" href= "{% static 'css/bootstrap.min.css' %}">
+</head>
+<body class="bg-light">
+    <!--UX Stuff-->
+    <div class="container p-5 bg-white">
+        <div class="row">
+            <div class="col text-center mt-2">
+                <h1>Der Bichsel Bot</h1>
+                <blockquote class="blockquote text-center">
+                    <p class="mb-3">Ein Tisch ist ein Tisch</p>
+                    <footer class="blockquote-footer">Peter Bichsel <cite title="Source Title">(but is it?!)</cite></footer>
+                  </blockquote>
+                <!-- Resultat des Uploads -->
+                {% if message %}
+                {% if message == "Keine Datei ausgewählt" %}
+                    <div class="alert alert-danger mt-1" role="alert">
+                        {{ message }}
+                    </div>
+                {% elif message == "Bild erfolgreich hochgeladen" %}
+                    <div class="alert alert-success mt-1" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            {% endif %}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <!-- Upload -->
+            <div class="col text-center">
+                <h3>1. Schritt:</h3>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" class="form-control" name="uploaded_file" id="customFile">
+                    <input type="submit" class="btn btn-outline-info mt-3" value="Bild hochladen">
+                </form>
+            </div>
+            <!-- Anzeige Bild -->
+            <div class="col text-center" id="step2">
+                {% if file_url %}
+                <h3>Schritt 2:</h3>
+                <img src="{{ file_url }}" alt="Hochgeladenes Bild" style="max-width: 50%;">
+                <form method="GET" action="{% url 'image_processing' %}">
+                    <input type="hidden" name="file_url" value="{{ file_url }}">
+                    <input type="hidden" name="file_path" value="{{ file_path }}">
+                    <button id="askBtn" class="btn btn-outline-info m-3">Benenne diesen Gegenstand</button>
+                </form>                
+                {% endif %}
+            </div>
+            <!-- Classify -->
+            <div class="col text-center d-flex align-items-center">
+                <div class="row" id="bichsel">
+                    <div class="col">
+                        <img src="{% static 'img/Bichsel.jpg' %}" alt="Peter Bichsel" class="bichselbild">
+                    </div>
+                    <div class="col">
+                        <h5 class="alert-heading">Peter Bichsel sagt:</h5>
+                        <div id="result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <!-- Bootstrap JS -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- Popper JS -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+</body>
+</html>

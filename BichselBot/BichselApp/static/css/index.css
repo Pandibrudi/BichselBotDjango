@@ -1,0 +1,37 @@
+.alert{
+    top: 20px;
+}
+
+.bichselbild{
+    border-radius: 50%;
+    object-fit: cover;
+    width: 70%;
+    height: 70%;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa; /* Hellere Hintergrundfarbe für den gesamten Bildschirm */
+}
+
+.container {
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 800px;
+    width: 100%;
+}
+
+#result{
+
+    font-style: italic;
+    font-size: 20pt;
+}
+
+img {
+    border-radius: 8px;
+}
